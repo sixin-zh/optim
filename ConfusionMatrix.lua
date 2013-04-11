@@ -48,6 +48,15 @@ function ConfusionMatrix:add(prediction, target)
    end
 end
 
+function ConfusionMatrix:addbatch(prediction, target)
+   local prediction = prediction:float()
+   local target = target:float()
+   local _,prediction_id = torch.max(prediction,2)
+   for i = 1,prediction_id:size(1) do
+      self.mat[target[i]][prediction_id[i]] = self.mat[target[i]][prediction_id[i]] + 1
+   end
+end
+
 function ConfusionMatrix:zero()
    self.mat:zero()
    self.valids:zero()
